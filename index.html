@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>مشتلة السلام — المتجر (نسخة الشراء السريع)</title>
-
+    
     <!-- مكتبات الخطوط والرموز -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-
+    
     <style>
         /* متغيرات الألوان والتصميم */
         :root {
@@ -28,7 +28,7 @@
         /* تعيينات عامة */
         * {
             box-sizing: border-box;
-            font-family: 'Tajawal', Arial, sans-serif
+            font-family: 'Tajawal', Arial, sans-serif;
         }
         
         body {
@@ -36,7 +36,10 @@
             background: var(--bg);
             color: #222;
             direction: rtl;
-            -webkit-font-smoothing: antialiased
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         /* تصميم الهيدر */
@@ -47,7 +50,7 @@
             top: 0;
             z-index: 1000;
             padding: 14px 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
         
         .header-inner {
@@ -56,18 +59,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px
+            gap: 12px;
         }
         
         .brand {
             display: flex;
             gap: 12px;
-            align-items: center
+            align-items: center;
         }
         
         .brand h1 {
             margin: 0;
-            font-size: 20px
+            font-size: 20px;
         }
         
         /* تصيم القائمة الرئيسية */
@@ -78,7 +81,7 @@
             display: flex;
             gap: 10px;
             align-items: center;
-            flex-wrap: wrap
+            flex-wrap: wrap;
         }
         
         nav a {
@@ -87,14 +90,15 @@
             padding: 6px 10px;
             border-radius: 8px;
             transition: background .15s;
-            font-weight: 600
+            font-weight: 600;
         }
         
         /* تصميم المحتوى الرئيسي */
         .container {
             max-width: 1200px;
             margin: 18px auto;
-            padding: 0 14px 120px 14px
+            padding: 0 14px 120px 14px;
+            flex: 1;
         }
         
         .category {
@@ -102,7 +106,7 @@
             border-radius: var(--radius);
             padding: 14px;
             box-shadow: 0 6px 18px rgba(16, 16, 16, 0.04);
-            margin-bottom: 18px
+            margin-bottom: 18px;
         }
         
         /* تصميم شبكة المنتجات */
@@ -110,7 +114,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 14px;
-            align-items: stretch
+            align-items: stretch;
         }
         
         .product {
@@ -120,19 +124,19 @@
             border-radius: var(--radius);
             overflow: hidden;
             transition: transform .18s, box-shadow .18s;
-            min-height: 370px
+            min-height: 370px;
         }
         
         .product:hover {
             transform: translateY(-6px);
-            box-shadow: 0 14px 30px rgba(16, 16, 16, 0.06)
+            box-shadow: 0 14px 30px rgba(16, 16, 16, 0.06);
         }
         
         .product img {
             width: 100%;
             height: 200px;
             object-fit: cover;
-            display: block
+            display: block;
         }
         
         .product-info {
@@ -140,24 +144,24 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            flex: 1
+            flex: 1;
         }
         
         .product-info h3 {
             margin: 0;
-            font-size: 16px
+            font-size: 16px;
         }
         
         .product-info p {
             margin: 0;
             color: var(--muted);
-            font-size: 14px
+            font-size: 14px;
         }
         
         .price {
             font-weight: 700;
             color: var(--primary);
-            font-size: 15px
+            font-size: 15px;
         }
         
         /* تصميم الأصناف داخل البطاقات */
@@ -167,7 +171,7 @@
             font-size: 14px;
             display: flex;
             flex-direction: column;
-            gap: 6px
+            gap: 6px;
         }
         
         .varieties-inline .var-item {
@@ -177,12 +181,12 @@
             gap: 8px;
             background: #f7fff7;
             padding: 8px;
-            border-radius: 8px
+            border-radius: 8px;
         }
         
         .varieties-inline .var-label {
             flex: 1;
-            text-align: right
+            text-align: right;
         }
         
         /* زر الشراء بدلاً من "أضف سريعًا" */
@@ -194,7 +198,12 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 700;
-            white-space: nowrap
+            white-space: nowrap;
+            transition: background 0.3s;
+        }
+        
+        .btn-add-quick:hover {
+            background: var(--primary-dark);
         }
         
         /* زر السلة العائم */
@@ -211,7 +220,12 @@
             display: flex;
             gap: 10px;
             align-items: center;
-            cursor: pointer
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        #floatingCartBtn:hover {
+            transform: scale(1.05);
         }
         
         #floatingCartBtn .count {
@@ -219,7 +233,7 @@
             color: var(--primary);
             padding: 4px 8px;
             border-radius: 12px;
-            font-weight: 700
+            font-weight: 700;
         }
         
         /* تصميم سلة المشتريات الجانبية */
@@ -235,11 +249,11 @@
             transition: right .28s ease;
             padding: 14px;
             display: flex;
-            flex-direction: column
+            flex-direction: column;
         }
         
         .quickcart.open {
-            right: 0
+            right: 0;
         }
         
         .qc-header {
@@ -249,13 +263,13 @@
             gap: 8px;
             padding-bottom: 8px;
             border-bottom: 1px solid #eee;
-            position: relative
+            position: relative;
         }
         
         .qc-body {
             overflow: auto;
             padding: 8px 0;
-            flex: 1
+            flex: 1;
         }
         
         .qc-item {
@@ -266,11 +280,11 @@
             border-radius: 8px;
             border: 1px solid #f0f0f0;
             margin-bottom: 8px;
-            background: #fbfff8
+            background: #fbfff8;
         }
         
         .qc-item .info {
-            flex: 1
+            flex: 1;
         }
         
         .qc-footer {
@@ -278,13 +292,13 @@
             padding-top: 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px
+            gap: 8px;
         }
         
         .qc-actions {
             display: flex;
             gap: 8px;
-            flex-wrap: wrap
+            flex-wrap: wrap;
         }
         
         /* تصميم الأزرار */
@@ -293,32 +307,45 @@
             border-radius: 8px;
             border: none;
             cursor: pointer;
-            font-weight: 700
+            font-weight: 700;
+            transition: all 0.3s;
         }
         
         .btn.primary {
             background: var(--primary);
-            color: #fff
+            color: #fff;
+        }
+        
+        .btn.primary:hover {
+            background: var(--primary-dark);
         }
         
         .btn.secondary {
             background: #f0f0f0;
-            color: #222
+            color: #222;
+        }
+        
+        .btn.secondary:hover {
+            background: #e0e0e0;
         }
         
         .btn.wa {
             background: var(--wa-green);
-            color: #fff
+            color: #fff;
+        }
+        
+        .btn.wa:hover {
+            background: #128C7E;
         }
         
         .btn.danger {
             background: var(--danger);
-            color: #fff
+            color: #fff;
         }
         
         .small-btn {
             padding: 6px 8px;
-            font-size: 14px
+            font-size: 14px;
         }
         
         /* إشعارات السلة */
@@ -331,17 +358,17 @@
             padding: 12px;
             border-radius: 6px;
             z-index: 1500;
-            animation: fadeIn .4s
+            animation: fadeIn .4s;
         }
         
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px)
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
-                transform: translateY(0)
+                transform: translateY(0);
             }
         }
         
@@ -350,8 +377,7 @@
             background: linear-gradient(90deg, var(--footer-dark), #133814);
             color: #fff;
             padding: 22px 14px;
-            margin-top: 18px;
-            border-radius: 8px
+            margin-top: auto;
         }
         
         .footer-inner {
@@ -361,17 +387,26 @@
             gap: 20px;
             flex-wrap: wrap;
             align-items: flex-start;
-            justify-content: space-between
+            justify-content: space-between;
+        }
+        
+        .footer-col {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 15px;
         }
         
         /* تصميم متجاوب */
         @media (max-width:900px) {
             .products {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             }
             .quickcart {
                 width: 100%;
-                max-width: 420px
+                max-width: 420px;
+            }
+            .header-inner {
+                flex-direction: column;
             }
         }
         
@@ -380,7 +415,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            margin-top: 8px
+            margin-top: 8px;
         }
         
         .qty-btn {
@@ -414,36 +449,36 @@
         
         /* تصميم زر إفراغ السلة في الأعلى */
         .clear-cart-top {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
             background: var(--danger);
             color: white;
             border: none;
-            padding: 6px 10px;
+            padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
             display: flex;
             align-items: center;
             gap: 4px;
+            transition: background 0.3s;
+        }
+        
+        .clear-cart-top:hover {
+            background: #b71c1c;
         }
         
         /* تخصيصات للأجهزة المحمولة */
         @media (max-width: 480px) {
-            .header-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
             nav ul {
                 margin-top: 10px;
-                justify-content: flex-start;
+                justify-content: center;
             }
             .qty-control {
                 flex-direction: column;
             }
             .qc-actions {
+                flex-direction: column;
+            }
+            .footer-inner {
                 flex-direction: column;
             }
         }
@@ -587,7 +622,7 @@
         <span id="cartCount" class="count">0</span>
     </button>
 
-    <!-- شريط السلة الجانبي (Quick Cart) -->
+    <!-- شريط السلة الجانبية (Quick Cart) -->
     <aside id="quickCart" class="quickcart" aria-hidden="true">
         <div class="qc-header">
             <div>
@@ -596,7 +631,7 @@
             </div>
             <div>
                 <button class="clear-cart-top" onclick="clearCartConfirm()" title="إفراغ السلة">
-                    <i class="fas fa-trash"></i> إفراغ
+                    <i class="fas fa-trash"></i> إفراغ السلة
                 </button>
                 <button class="btn secondary small-btn" onclick="closeQuickCart()" aria-label="إغلاق"><i class="fas fa-times"></i></button>
             </div>
@@ -609,16 +644,4 @@
 
         <div class="qc-footer">
             <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
-                <div><strong>المجموع:</strong> <span id="qcTotal">0 دج</span></div>
-                <div><small id="qcItemsCount">0 عنصر</small></div>
-            </div>
-
-            <h4 style="margin:6px 0 0 0">بيانات الزبون</h4>
-            <div style="display:grid;grid-template-columns:1fr;gap:8px">
-                <input id="qcName" placeholder="الاسم الكامل" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee">
-                <input id="qcPhone" placeholder="رقم الهاتف (مثال: 0559...)" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee">
-                <textarea id="qcAddress" placeholder="عنوان التوصيل" rows="2" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee"></textarea>
-            </div>
-
-            <div class="qc-actions" style="margin-top:8px">
-                <button id="sendOr
+                <div><stron
