@@ -1,647 +1,220 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>مشتلة السلام — المتجر (نسخة الشراء السريع)</title>
-    
-    <!-- مكتبات الخطوط والرموز -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        /* متغيرات الألوان والتصميم */
-        :root {
-            --primary: #2e7d32;
-            --primary-dark: #1b5e20;
-            --accent: #81c784;
-            --bg: #f5f6f4;
-            --card: #fff;
-            --muted: #6b6b6b;
-            --danger: #c62828;
-            --footer-dark: #163a16;
-            --radius: 10px;
-            --wa-green: #25D366;
-        }
-        
-        /* تعيينات عامة */
-        * {
-            box-sizing: border-box;
-            font-family: 'Tajawal', Arial, sans-serif;
-        }
-        
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: #222;
-            direction: rtl;
-            -webkit-font-smoothing: antialiased;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* تصميم الهيدر */
-        header {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 14px 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-        
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-        
-        .brand {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        
-        .brand h1 {
-            margin: 0;
-            font-size: 20px;
-        }
-        
-        /* تصيم القائمة الرئيسية */
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            padding: 6px 10px;
-            border-radius: 8px;
-            transition: background .15s;
-            font-weight: 600;
-        }
-        
-        /* تصميم المحتوى الرئيسي */
-        .container {
-            max-width: 1200px;
-            margin: 18px auto;
-            padding: 0 14px 120px 14px;
-            flex: 1;
-        }
-        
-        .category {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 14px;
-            box-shadow: 0 6px 18px rgba(16, 16, 16, 0.04);
-            margin-bottom: 18px;
-        }
-        
-        /* تصميم شبكة المنتجات */
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 14px;
-            align-items: stretch;
-        }
-        
-        .product {
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(180deg, #fff, #fbfffb);
-            border-radius: var(--radius);
-            overflow: hidden;
-            transition: transform .18s, box-shadow .18s;
-            min-height: 370px;
-        }
-        
-        .product:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 14px 30px rgba(16, 16, 16, 0.06);
-        }
-        
-        .product img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-        }
-        
-        .product-info {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1;
-        }
-        
-        .product-info h3 {
-            margin: 0;
-            font-size: 16px;
-        }
-        
-        .product-info p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 14px;
-        }
-        
-        .price {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 15px;
-        }
-        
-        /* تصميم الأصناف داخل البطاقات */
-        .varieties-inline {
-            margin-top: 6px;
-            color: #444;
-            font-size: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .varieties-inline .var-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            background: #f7fff7;
-            padding: 8px;
-            border-radius: 8px;
-        }
-        
-        .varieties-inline .var-label {
-            flex: 1;
-            text-align: right;
-        }
-        
-        /* زر الشراء بدلاً من "أضف سريعًا" */
-        .btn-add-quick {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            white-space: nowrap;
-            transition: background 0.3s;
-        }
-        
-        .btn-add-quick:hover {
-            background: var(--primary-dark);
-        }
-        
-        /* زر السلة العائم */
-        #floatingCartBtn {
-            position: fixed;
-            left: 16px;
-            bottom: 16px;
-            z-index: 1200;
-            background: var(--primary);
-            color: #fff;
-            padding: 12px 14px;
-            border-radius: 50px;
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        
-        #floatingCartBtn:hover {
-            transform: scale(1.05);
-        }
-        
-        #floatingCartBtn .count {
-            background: #fff;
-            color: var(--primary);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-weight: 700;
-        }
-        
-        /* تصميم سلة المشتريات الجانبية */
-        .quickcart {
-            position: fixed;
-            top: 0;
-            right: -420px;
-            width: 380px;
-            height: 100vh;
-            background: var(--card);
-            box-shadow: -8px 0 24px rgba(0, 0, 0, 0.12);
-            z-index: 1400;
-            transition: right .28s ease;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .quickcart.open {
-            right: 0;
-        }
-        
-        .qc-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-            position: relative;
-        }
-        
-        .qc-body {
-            overflow: auto;
-            padding: 8px 0;
-            flex: 1;
-        }
-        
-        .qc-item {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #f0f0f0;
-            margin-bottom: 8px;
-            background: #fbfff8;
-        }
-        
-        .qc-item .info {
-            flex: 1;
-        }
-        
-        .qc-footer {
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .qc-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        /* تصميم الأزرار */
-        .btn {
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.3s;
-        }
-        
-        .btn.primary {
-            background: var(--primary);
-            color: #fff;
-        }
-        
-        .btn.primary:hover {
-            background: var(--primary-dark);
-        }
-        
-        .btn.secondary {
-            background: #f0f0f0;
-            color: #222;
-        }
-        
-        .btn.secondary:hover {
-            background: #e0e0e0;
-        }
-        
-        .btn.wa {
-            background: var(--wa-green);
-            color: #fff;
-        }
-        
-        .btn.wa:hover {
-            background: #128C7E;
-        }
-        
-        .btn.danger {
-            background: var(--danger);
-            color: #fff;
-        }
-        
-        .small-btn {
-            padding: 6px 8px;
-            font-size: 14px;
-        }
-        
-        /* إشعارات السلة */
-        .cart-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 12px;
-            border-radius: 6px;
-            z-index: 1500;
-            animation: fadeIn .4s;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* تصميم الفوتر */
-        footer {
-            background: linear-gradient(90deg, var(--footer-dark), #133814);
-            color: #fff;
-            padding: 22px 14px;
-            margin-top: auto;
-        }
-        
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            justify-content: space-between;
-        }
-        
-        .footer-col {
-            flex: 1;
-            min-width: 250px;
-            margin-bottom: 15px;
-        }
-        
-        /* تصميم متجاوب */
-        @media (max-width:900px) {
-            .products {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            }
-            .quickcart {
-                width: 100%;
-                max-width: 420px;
-            }
-            .header-inner {
-                flex-direction: column;
-            }
-        }
-        
-        /* تصميم تحكم الكمية الجديد مع أزرار + و - */
-        .qty-control {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 8px;
-        }
-        
-        .qty-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            background: #fff;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .qty-btn:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-        
-        .qty-input {
-            width: 50px;
-            text-align: center;
-            padding: 6px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        
-        /* تصميم زر إفراغ السلة في الأعلى */
-        .clear-cart-top {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            transition: background 0.3s;
-        }
-        
-        .clear-cart-top:hover {
-            background: #b71c1c;
-        }
-        
-        /* تخصيصات للأجهزة المحمولة */
-        @media (max-width: 480px) {
-            nav ul {
-                margin-top: 10px;
-                justify-content: center;
-            }
-            .qty-control {
-                flex-direction: column;
-            }
-            .qc-actions {
-                flex-direction: column;
-            }
-            .footer-inner {
-                flex-direction: column;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>مشتلة السلام — المتجر</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- خط عربي -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;font-family:'Cairo',sans-serif;margin:0;padding:0}
+    body{background:#f9fdf9;color:#222;line-height:1.6}
+    header{background:#2e7d32;color:#fff;padding:1rem;position:sticky;top:0;z-index:1000}
+    header .top{display:flex;justify-content:space-between;align-items:center}
+    header h1{font-size:1.5rem}
+    .search-bar{margin-top:.7rem;display:flex;gap:.5rem;align-items:center;background:#fff;border-radius:6px;padding:.3rem .6rem}
+    .search-bar input{flex:1;border:none;outline:none;padding:.4rem;font-size:1rem}
+    .search-bar i{color:#2e7d32}
+    .cart-bar{background:#e8f5e9;padding:.6rem 1rem;margin-top:.7rem;display:flex;justify-content:space-between;align-items:center;
+      border:1px solid #c8e6c9;border-radius:6px;position:sticky;top:80px;z-index:999}
+    .cart-bar button{background:#2e7d32;color:#fff;border:none;padding:.5rem 1rem;border-radius:6px;font-weight:bold;cursor:pointer}
+    .category{margin:2rem 1rem}
+    .category-header{border-bottom:3px solid #2e7d32;margin-bottom:1rem}
+    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+    .card{background:#fff;border:1px solid #eee;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;
+      box-shadow:0 2px 6px rgba(0,0,0,.05);transition:transform .2s}
+    .card:hover{transform:translateY(-4px)}
+    .card img{width:100%;height:150px;object-fit:cover}
+    .card h3{padding:.5rem;font-size:1.1rem;color:#2e7d32}
+    .card p{padding:0 .5rem .5rem}
+    .card button{margin:.5rem;background:#43a047;color:#fff;border:none;padding:.5rem;border-radius:6px;cursor:pointer}
+    .card button:hover{background:#2e7d32}
+    /* السلة */
+    #cartModal{position:fixed;top:0;right:0;width:380px;max-width:100%;height:100%;background:#fff;box-shadow:-2px 0 6px rgba(0,0,0,.2);
+      transform:translateX(100%);transition:transform .3s ease-in-out;z-index:2000;display:flex;flex-direction:column}
+    #cartModal.active{transform:translateX(0)}
+    #cartModal header{background:#2e7d32;color:#fff;padding:.8rem;display:flex;justify-content:space-between;align-items:center}
+    #cartItems{flex:1;overflow-y:auto;padding:1rem}
+    .cart-item{display:flex;align-items:center;margin-bottom:1rem;border-bottom:1px solid #eee;padding-bottom:.5rem}
+    .cart-item img{width:50px;height:50px;object-fit:cover;border-radius:6px;margin-left:.5rem}
+    .cart-item h4{flex:1;font-size:.9rem}
+    .cart-item input{width:50px;text-align:center}
+    .cart-item button{background:none;border:none;color:red;cursor:pointer;font-size:1.2rem}
+    .cart-actions{padding:1rem;border-top:1px solid #eee}
+    .cart-actions button{margin:.3rem 0;width:100%;padding:.6rem;border:none;border-radius:6px;font-weight:bold;cursor:pointer}
+    .empty-btn{background:#c62828;color:#fff}
+    .checkout-btn{background:#2e7d32;color:#fff}
+    /* Toast */
+    .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2e7d32;color:#fff;
+      padding:.7rem 1.2rem;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:3000}
+    .toast.show{opacity:1;pointer-events:auto;transform:translate(-50%,-10px)}
+    /* Footer */
+    footer{background:#2e7d32;color:#dfeede;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:1rem;padding:1.5rem;margin-top:2rem}
+    footer h4{margin-bottom:.6rem}
+    footer a{display:block;color:#fff;margin:.3rem 0;text-decoration:none}
+    footer a i{margin-left:.3rem}
+    /* Responsive */
+    @media(max-width:600px){
+      .products{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+      #cartModal{width:100%}
+    }
+  </style>
 </head>
-
 <body>
-    <!-- الهيدر -->
-    <header>
-        <div class="header-inner">
-            <div class="brand" aria-label="مشتلة السلام">
-                <i class="fas fa-seedling" style="font-size:26px;color:#fff"></i>
-                <div>
-                    <h1>مشتلة السلام</h1>
-                    <p>شراء سريع — النسخة المحسنة</p>
-                </div>
-            </div>
-
-            <nav aria-label="القائمة الرئيسية">
-                <ul>
-                    <li><a href="#fruit-trees">الأشجار المثمرة</a></li>
-                    <li><a href="#flowers">الورود والزهور</a></li>
-                    <li><a href="#ornamental">تزيين</a></li>
-                    <li><a href="#vegetables">بذور وخضروات</a></li>
-                    <li><a href="#tools">أدوات وأسمدة</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- البحث -->
-    <div style="background:var(--primary-dark);padding:10px;">
-        <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:center;padding:6px 14px;">
-            <div style="width:100%;max-width:640px;position:relative;">
-                <input id="search-input" placeholder="ابحث عن منتج أو صنف..." style="width:100%;padding:12px 48px;border-radius:30px;border:2px solid #fff;font-size:16px;">
-                <button id="search-btn" style="position:absolute;left:6px;top:6px;width:40px;height:40px;border-radius:50%;border:none;background:var(--primary);color:#fff;"><i class="fas fa-search"></i></button>
-            </div>
-        </div>
+  <header>
+    <div class="top">
+      <h1><i class="fas fa-seedling"></i> مشتلة السلام</h1>
+      <div><i class="fas fa-phone"></i> 0697 743 721</div>
     </div>
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="ابحث عن منتج...">
+    </div>
+    <div class="cart-bar">
+      <span>🛒 <span id="cartCount">0</span> منتج | 💰 <span id="cartTotal">0</span> دج</span>
+      <button onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> عرض الفاتورة</button>
+    </div>
+  </header>
 
-    <!-- المحتوى -->
-    <main class="container">
-        <div id="noResults" style="display:none;text-align:center;padding:20px;color:var(--muted);">
-            <i class="fas fa-search" style="font-size:22px;margin-bottom:8px;"></i>
-            <div>لم يتم العثور على نتائج</div>
-        </div>
+  <main id="categories-container"></main>
 
-        <!-- قسم الأشجار المثمرة -->
-        <section id="fruit-trees" class="category">
-            <div class="category-header"><h2><i class="fas fa-apple-whole"></i> الأشجار المثمرة</h2></div>
-            <div class="products">
-                <div class="product" data-price="60" data-type="زيتون">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zite.jpg" alt="زيتون">
-                    <div class="product-info">
-                        <h3>زيتون لإنتاج الزيت</h3>
-                        <p>صنف ممتاز لإنتاج الزيوت</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>شملال - 60 دج</li>
-                                <li>سيقواز - 65 دج</li>
-                                <li>بيكوال - 70 دج</li>
-                                <li>ملكة العرب - 75 دج</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+  <!-- نافذة السلة -->
+  <div id="cartModal">
+    <header>
+      <h2><i class="fas fa-shopping-cart"></i> سلة المشتريات</h2>
+      <button onclick="toggleCart()" style="background:none;border:none;color:#fff;font-size:1.3rem"><i class="fas fa-times"></i></button>
+    </header>
+    <div id="cartItems"></div>
+    <div class="cart-actions">
+      <button class="empty-btn" onclick="emptyCart()"><i class="fas fa-trash"></i> إفراغ السلة</button>
+      <input id="customerName" type="text" placeholder="اسم الزبون" style="width:100%;margin:.3rem 0;padding:.5rem">
+      <input id="customerPhone" type="text" placeholder="رقم الهاتف" style="width:100%;margin:.3rem 0;padding:.5rem">
+      <button class="checkout-btn" onclick="checkout('whatsapp')"><i class="fab fa-whatsapp"></i> إتمام عبر واتساب</button>
+      <button class="checkout-btn" onclick="checkout('google')"><i class="fas fa-credit-card"></i> إتمام عبر Google</button>
+    </div>
+  </div>
 
-                <div class="product" data-price="55" data-type="زيتون">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zitoun.jpg" alt="زيتون">
-                    <div class="product-info">
-                        <h3>زيتون للترقيد</h3>
-                        <p>من أفضل الأصناف للترقيد</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>فركاني - 55 دج</li>
-                                <li>بيكوال - 60 دج</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+  <div class="toast" id="toast"></div>
 
-                <div class="product" data-price="45" data-type="حمضيات">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/tchina.jpg" alt="برتقال">
-                    <div class="product-info">
-                        <h3>برتقال</h3>
-                        <p>صنف حلو المذاق</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>طومسون - 45 دج</li>
-                                <li>بالنسي - 50 دج</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  <footer>
+    <div>
+      <h4>مشتلة السلام</h4>
+      <p>أجود أنواع الشتلات والخدمات الزراعية</p>
+      <a href="#"><i class="fas fa-map-marker-alt"></i> توجه إلى المشتل</a>
+    </div>
+    <div>
+      <h4><i class="fas fa-map"></i> العنوان</h4>
+      <p>حي السلام - الجزائر</p>
+      <h4><i class="fas fa-phone"></i> الهاتف</h4>
+      <p>0697 743 721</p>
+    </div>
+    <div>
+      <h4>تابعنا</h4>
+      <a href="#"><i class="fab fa-facebook"></i> فيسبوك</a>
+      <a href="#"><i class="fab fa-instagram"></i> إنستغرام</a>
+      <a href="#"><i class="fab fa-whatsapp"></i> واتساب</a>
+    </div>
+    <div>
+      <h4><i class="fas fa-cogs"></i> خدماتنا</h4>
+      <p>🌱 بيع الشتلات</p>
+      <p>🚚 التوصيل</p>
+      <p>🛠️ الاستشارات الزراعية</p>
+    </div>
+  </footer>
 
-        <!-- قسم الورود والنباتات -->
-        <section id="flowers" class="category">
-            <div class="category-header"><h2><i class="fas fa-rose"></i> ورود ونباتات</h2></div>
-            <div class="products">
-                <div class="product" data-price="40" data-type="ورود">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-djouri.jpg" alt="ورد">
-                    <div class="product-info">
-                        <h3>ورد جوري</h3>
-                        <p>ملكة الزهور</p>
-                        <div class="varieties"><ul><li>جوري أحمر - 40 دج</li><li>جوري وردي - 45 دج</li></ul></div>
-                    </div>
-                </div>
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbxMYSinB7TRS-wtpunBOT9Telb6pKAMvuRTWfc12elRnvcwsO0VUT1s0arOfG-S9-vPHA/exec";
+let cart=[];let products=[];
 
-                <div class="product" data-price="35" data-type="ورود">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-feell.jpg" alt="ورد فل">
-                    <div class="product-info">
-                        <h3>ورد فل</h3>
-                        <p>رائحة عطرة</p>
-                        <div class="varieties"><ul><li>فل - 35 دج</li></ul></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- أقسام أخرى -->
-        <section id="ornamental" class="category">
-            <div class="category-header"><h2><i class="fas fa-tree"></i> نباتات تزيينية</h2></div>
-            <div class="products">
-                <div class="product" data-price="30" data-type="تزيين">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/ornamental1.jpg" alt="نبات تزييني">
-                    <div class="product-info">
-                        <h3>نبات البوتس</h3>
-                        <p>نبات داخلي جميل</p>
-                        <div class="varieties"><ul><li>أخضر - 30 دج</li><li>متنوع - 35 دج</li></ul></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- زر السلة العائم -->
-    <button id="floatingCartBtn" aria-label="سلة المشتريات" title="عرض السلة">
-        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-        <span id="cartCount" class="count">0</span>
-    </button>
-
-    <!-- شريط السلة الجانبية (Quick Cart) -->
-    <aside id="quickCart" class="quickcart" aria-hidden="true">
-        <div class="qc-header">
-            <div>
-                <h3 style="margin:0">سلة المشتريات</h3>
-                <div id="qc-subtext" style="font-size:13px;color:var(--muted)">تفاصيل الطلب</div>
-            </div>
-            <div>
-                <button class="clear-cart-top" onclick="clearCartConfirm()" title="إفراغ السلة">
-                    <i class="fas fa-trash"></i> إفراغ السلة
-                </button>
-                <button class="btn secondary small-btn" onclick="closeQuickCart()" aria-label="إغلاق"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
-
-        <div class="qc-body" id="qcBody">
-            <!-- تظهر هنا العناصر -->
-            <div id="qcEmpty" style="text-align:center;color:var(--muted);padding:18px">السلة فارغة</div>
-        </div>
-
-        <div class="qc-footer">
-            <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
-                <div><stron
+async function loadProducts(){
+  try{
+    const res=await fetch(API_URL+"?sheet=products");
+    products=await res.json();
+    renderProducts(products);
+  }catch(e){console.error(e);}
+}
+function renderProducts(list){
+  const container=document.getElementById("categories-container");
+  container.innerHTML="";
+  const grouped={};
+  list.forEach(p=>{
+    const cat=(p["الفئة "]||"غير مصنف").trim();
+    (grouped[cat] ||= []).push(p);
+  });
+  Object.entries(grouped).forEach(([catName,items])=>{
+    const section=document.createElement("section");
+    section.className="category";
+    section.innerHTML=`<div class="category-header"><h2>${catName}</h2></div><div class="products"></div>`;
+    items.forEach(p=>{
+      const card=document.createElement("div");
+      card.className="card";
+      card.innerHTML=`
+        <img src="${p["رابط الصورة"]||'https://via.placeholder.com/200'}">
+        <h3>${p["اسم المنتج"]}</h3>
+        <p>السعر: ${p["السعر "]} دج</p>
+        <button onclick='addToCart(${JSON.stringify(p)})'><i class="fas fa-cart-plus"></i> أضف للسلة</button>`;
+      section.querySelector(".products").appendChild(card);
+    });
+    container.appendChild(section);
+  });
+}
+function addToCart(p){
+  const found=cart.find(it=>it.id===p.id);
+  if(found){found.qty++;} else {cart.push({id:p.id,name:p["اسم المنتج"],price:p["السعر "],img:p["رابط الصورة"],qty:1});}
+  updateCartUI();
+  showToast(`✅ تم إضافة ${p["اسم المنتج"]} للسلة`);
+}
+function updateCartUI(){
+  document.getElementById("cartCount").innerText=cart.length;
+  let total=cart.reduce((s,it)=>s+it.price*it.qty,0);
+  document.getElementById("cartTotal").innerText=total;
+  const cartItems=document.getElementById("cartItems");
+  cartItems.innerHTML="";
+  cart.forEach((it,i)=>{
+    const div=document.createElement("div");
+    div.className="cart-item";
+    div.innerHTML=`<img src="${it.img||'https://via.placeholder.com/50'}">
+      <h4>${it.name}</h4>
+      <input type='number' min=1 value='${it.qty}' onchange='changeQty(${i},this.value)'>
+      <span>${it.price*it.qty} دج</span>
+      <button onclick='removeItem(${i})'><i class="fas fa-trash"></i></button>`;
+    cartItems.appendChild(div);
+  });
+}
+function changeQty(i,v){cart[i].qty=parseInt(v)||1;updateCartUI();}
+function removeItem(i){cart.splice(i,1);updateCartUI();}
+function emptyCart(){cart=[];updateCartUI();}
+function toggleCart(){document.getElementById("cartModal").classList.toggle("active");}
+function checkout(type){
+  const name=document.getElementById("customerName").value.trim();
+  const phone=document.getElementById("customerPhone").value.trim();
+  if(!name||!phone){alert("الرجاء إدخال الاسم ورقم الهاتف");return;}
+  const items=cart.map(it=>`${it.name} x${it.qty}`).join(", ");
+  const total=cart.reduce((s,it)=>s+it.price*it.qty,0);
+  // send to Sheets
+  fetch(API_URL,{method:"POST",body:JSON.stringify({action:"addOrder",customerName:name,phone:phone,items:items,total:total,status:"جديد"})});
+  if(type==="whatsapp"){
+    const msg=`طلب جديد:%0A👤 ${name}%0A📞 ${phone}%0A🛒 ${items}%0A💰 ${total} دج`;
+    window.open(`https://wa.me/213697743721?text=${msg}`,"_blank");
+  }else{alert("✅ تم إرسال الطلب إلى المتجر");}
+  emptyCart();toggleCart();
+}
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.innerText=msg;
+  t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2500);
+}
+// البحث
+document.getElementById("searchInput").addEventListener("input",e=>{
+  const q=e.target.value.toLowerCase();
+  const filtered=products.filter(p=>p["اسم المنتج"].toLowerCase().includes(q));
+  renderProducts(filtered.length?filtered:products);
+});
+loadProducts();
+</script>
+</body>
+</html>
