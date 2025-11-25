@@ -42,14 +42,6 @@
       font-size: 1.5rem
     }
 
-    header {
-      transition: transform .3s ease;
-    }
-
-    header.hide {
-      transform: translateY(-100%);
-    }
-
     .search-bar {
       margin-top: .7rem;
       display: flex;
@@ -103,7 +95,7 @@
       background: #fff;
       padding: .6rem 1rem;
       margin-top: .7rem;
-      display: none !important;
+      display: flex;
       justify-content: space-between;
       align-items: center;
       border: 2px solid #2e7d32;
@@ -277,42 +269,6 @@
       cursor: pointer
     }
 
-    #floatingCartBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #2e7d32;
-      color: #fff;
-      border: none;
-      width: 65px;
-      height: 65px;
-      border-radius: 50%;
-      font-size: 1.6rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
-      cursor: pointer;
-      z-index: 3000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #floatingCartBtn span {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: red;
-      color: #fff;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      font-size: .8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-
-
     .empty-btn {
       background: #c62828;
       color: #fff
@@ -381,27 +337,47 @@
         width: 100%
       }
     }
+  
+/* --- Added for header hide/show and floating cart --- */
+header { transition: transform .3s ease; }
+header.hide { transform: translateY(-100%); }
+.cart-bar { display:none !important; }
 
-    html,
-    body {
-      height: 100%;
-    }
+#floatingCartBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+  cursor: pointer;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#floatingCartBtn span {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: .8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
 
-    body {
-      display: flex;
-      flex-direction: column;
-    }
-
-    main {
-      flex: 1;
-      /* يدفع الفوتر للأسفل */
-    }
-
-    footer {
-      margin-top: auto;
-      /* يثبت الفوتر في الأسفل */
-    }
-  </style>
+</style>
 </head>
 
 <body>
@@ -437,13 +413,6 @@
       <input id="customerName" type="text" placeholder="👤 اسم الزبون" style="width:100%;margin:.3rem 0;padding:.5rem">
       <input id="customerPhone" type="text" placeholder="📞 رقم الهاتف" style="width:100%;margin:.3rem 0;padding:.5rem">
       <input id="customerAddress" type="text" placeholder="📍 العنوان" style="width:100%;margin:.3rem 0;padding:.5rem">
-
-
-      <button onclick="getLocation()"
-        style="width:100%;padding:.6rem;border:none;border-radius:6px;background:#0277bd;color:#fff;font-weight:bold;margin:.3rem 0">
-        <i class="fas fa-map-location-dot"></i> تحديد موقعي تلقائياً
-      </button>
-
       <button class="checkout-btn" onclick="checkout('whatsapp')"><i class="fab fa-whatsapp"></i> إتمام عبر
         واتساب</button>
       <button class="checkout-btn" onclick="checkout('google')"><i class="fas fa-credit-card"></i> إتمام عبر
@@ -478,12 +447,6 @@
 
     </div>
   </footer>
-
-  <button id="floatingCartBtn" onclick="toggleCart()">
-    <i class="fas fa-shopping-cart"></i>
-    <span id="floatingCartCount">0</span>
-  </button>
-
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxMYSinB7TRS-wtpunBOT9Telb6pKAMvuRTWfc12elRnvcwsO0VUT1s0arOfG-S9-vPHA/exec";
@@ -523,138 +486,98 @@
     }
     function addToCart(p) {
       const found = cart.find(it => it.id === p.id);
-      if (found) { found.qty++; } else {
-        cart.push({
-          id: p.id,
-          name: p["اسم المنتج"],
-          price: parseFloat(p["السعر "]) || 0,
-          img: p["رابط الصورة"],
-          qty: 1
-        });
-        updateCartUI();
-        showToast(`تمت إضافة ${p["اسم المنتج"]} للسلة`);
-      }
-
-
-      function updateCartUI() {
-        const totalItems = cart.reduce((s, it) => s + (parseInt(it.qty) || 0), 0);
-        document.getElementById("cartCount").innerText = totalItems;
-
-        document.getElementById("floatingCartCount").innerText = cart.reduce((s, it) => s + it.qty, 0);
-
-
-        let total = cart.reduce((s, it) => s + (parseFloat(it.price) || 0) * (parseInt(it.qty) || 1), 0);
-        document.getElementById("cartTotal").innerText = total;
-
-        const cartItems = document.getElementById("cartItems");
-        cartItems.innerHTML = "";
-
-        cart.forEach((it, i) => {
-          const div = document.createElement("div");
-          div.className = "cart-item";
-          div.innerHTML = `
-      <img src="${it.img || 'https://via.placeholder.com/50'}">
+      if (found) { found.qty++; } else { cart.push({ id: p.id, name: p["اسم المنتج"], price: p["السعر "], img: p["رابط الصورة"], qty: 1 }); }
+      updateCartUI();
+      showToast(`تمت إضافة ${p["اسم المنتج"]} للسلة`);
+    }
+    function updateCartUI() {
+      document.getElementById("cartCount").innerText = cart.length;
+      let total = cart.reduce((s, it) => s + it.price * it.qty, 0);
+      document.getElementById("cartTotal").innerText = total;
+      const cartItems = document.getElementById("cartItems");
+      cartItems.innerHTML = "";
+      cart.forEach((it, i) => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `<img src="${it.img || 'https://via.placeholder.com/50'}">
       <h4>${it.name}</h4>
       <input type='number' min=1 value='${it.qty}' onchange='changeQty(${i},this.value)'>
-      <span>${(parseFloat(it.price) * it.qty) || 0} دج</span>
+      <span>${it.price * it.qty} دج</span>
       <button onclick='removeItem(${i})'><i class="fas fa-trash"></i></button>`;
-          cartItems.appendChild(div);
-        });
-      }
-
-
-      function changeQty(i, v) { cart[i].qty = parseInt(v) || 1; updateCartUI(); }
-      function removeItem(i) { cart.splice(i, 1); updateCartUI(); }
-      function emptyCart() { cart = []; updateCartUI(); }
-      function toggleCart() { document.getElementById("cartModal").classList.toggle("active"); }
-      function checkout(type) {
-        const name = document.getElementById("customerName").value.trim();
-        const phone = document.getElementById("customerPhone").value.trim();
-        const address = document.getElementById("customerAddress").value.trim();
-        if (!name || !phone || !address) { alert("الرجاء إدخال الاسم ورقم الهاتف والعنوان"); return; }
-        const items = cart.map(it => `${it.name} x${it.qty}`).join(", ");
-        const total = cart.reduce((s, it) => s + it.price * it.qty, 0);
-        // send to Sheets
-        fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "addOrder", customerName: name, phone: phone, address: address, items: items, total: total, status: "جديد" }) });
-        if (type === "whatsapp") {
-          const msg = encodeURIComponent(
-            `طلب جديد:
-👤 ${name}
-📞 ${phone}
-📍 ${address}
-🛒 ${items}
-💰 ${total} دج`
-          );
-          window.open(`https://wa.me/213697743721?text=${msg}`, "_blank");
-        } else { alert("✅ تم إرسال الطلب إلى المتجر"); }
-        emptyCart(); toggleCart();
-      }
-      function showToast(msg) {
-        const t = document.getElementById("toast");
-        t.innerText = msg;
-        t.classList.add("show");
-        setTimeout(() => t.classList.remove("show"), 2500);
-      }
-      // البحث + الاقتراحات
-      const searchInput = document.getElementById("searchInput");
-      const suggestions = document.getElementById("suggestions");
-      searchInput.addEventListener("input", e => {
-        const q = e.target.value.toLowerCase();
-        if (!q) { suggestions.style.display = "none"; renderProducts(products); return; }
-        const filtered = products.filter(p => p["اسم المنتج"].toLowerCase().includes(q));
-        renderProducts(filtered.length ? filtered : products);
-        suggestions.innerHTML = "";
-        filtered.forEach(p => {
-          const div = document.createElement("div");
-          div.innerHTML = `<i class="fas fa-leaf"></i> ${p["اسم المنتج"]}`;
-          div.onclick = () => { searchInput.value = p["اسم المنتج"]; renderProducts([p]); suggestions.style.display = "none"; }
-          suggestions.appendChild(div);
-        });
-        suggestions.style.display = filtered.length ? "block" : "none";
+        cartItems.appendChild(div);
       });
-      document.addEventListener("click", e => { if (!searchInput.contains(e.target)) suggestions.style.display = "none"; });
-      loadProducts();
-
-      function getLocation() {
-        if (!navigator.geolocation) {
-          showToast("المتصفح لا يدعم تحديد الموقع");
-          return;
-        }
-
-        showToast("جاري تحديد موقعك...");
-
-        navigator.geolocation.getCurrentPosition(
-          pos => {
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-
-            const link = `https://www.google.com/maps?q=${lat},${lon}`;
-            document.getElementById("customerAddress").value = `📍 موقعي: ${link}`;
-
-            showToast("تم جلب موقعك بنجاح");
-          },
-          err => {
-            showToast("فشل تحديد الموقع. يرجى تفعيل GPS");
-          }
-        );
-      }
-
-
-      let lastScroll = 0;
-
-      window.addEventListener("scroll", () => {
-        const current = window.pageYOffset;
-
-        if (current > lastScroll && current > 80) {
-          document.querySelector("header").classList.add("hide");
-        } else {
-          document.querySelector("header").classList.remove("hide");
-        }
-
-        lastScroll = current;
+    }
+    function changeQty(i, v) { cart[i].qty = parseInt(v) || 1; updateCartUI(); }
+    function removeItem(i) { cart.splice(i, 1); updateCartUI(); }
+    function emptyCart() { cart = []; updateCartUI(); }
+    function toggleCart() { document.getElementById("cartModal").classList.toggle("active"); }
+    function checkout(type) {
+      const name = document.getElementById("customerName").value.trim();
+      const phone = document.getElementById("customerPhone").value.trim();
+      const address = document.getElementById("customerAddress").value.trim();
+      if (!name || !phone || !address) { alert("الرجاء إدخال الاسم ورقم الهاتف والعنوان"); return; }
+      const items = cart.map(it => `${it.name} x${it.qty}`).join(", ");
+      const total = cart.reduce((s, it) => s + it.price * it.qty, 0);
+      // send to Sheets
+      fetch(API_URL, { method: "POST", body: JSON.stringify({ action: "addOrder", customerName: name, phone: phone, address: address, items: items, total: total, status: "جديد" }) });
+      if (type === "whatsapp") {
+        const msg = `طلب جديد:%0A👤 ${name}%0A📞 ${phone}%0A📍 ${address}%0A🛒 ${items}%0A💰 ${total} دج`;
+        window.open(`https://wa.me/213697743721?text=${msg}`, "_blank");
+      } else { alert("✅ تم إرسال الطلب إلى المتجر"); }
+      emptyCart(); toggleCart();
+    }
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2500);
+    }
+    // البحث + الاقتراحات
+    const searchInput = document.getElementById("searchInput");
+    const suggestions = document.getElementById("suggestions");
+    searchInput.addEventListener("input", e => {
+      const q = e.target.value.toLowerCase();
+      if (!q) { suggestions.style.display = "none"; renderProducts(products); return; }
+      const filtered = products.filter(p => p["اسم المنتج"].toLowerCase().includes(q));
+      renderProducts(filtered.length ? filtered : products);
+      suggestions.innerHTML = "";
+      filtered.forEach(p => {
+        const div = document.createElement("div");
+        div.innerHTML = `<i class="fas fa-leaf"></i> ${p["اسم المنتج"]}`;
+        div.onclick = () => { searchInput.value = p["اسم المنتج"]; renderProducts([p]); suggestions.style.display = "none"; }
+        suggestions.appendChild(div);
       });
+      suggestions.style.display = filtered.length ? "block" : "none";
+    });
+    document.addEventListener("click", e => { if (!searchInput.contains(e.target)) suggestions.style.display = "none"; });
+    loadProducts();
+  
+// --- Added: header hide/show ---
+let lastScroll = 0;
+window.addEventListener("scroll", () => {
+  const current = window.pageYOffset;
+  if (current > lastScroll && current > 80) {
+    document.querySelector("header").classList.add("hide");
+  } else {
+    document.querySelector("header").classList.remove("hide");
+  }
+  lastScroll = current;
+});
 
-  </script>
+// Inject floating cart count update
+const oldUpdateCartUI = updateCartUI;
+updateCartUI = function() {
+  oldUpdateCartUI();
+  document.getElementById("floatingCartCount").innerText =
+    cart.reduce((s, it) => s + (parseInt(it.qty) || 0), 0);
+};
+
+</script>
+
+<button id="floatingCartBtn" onclick="toggleCart()">
+  <i class="fas fa-shopping-cart"></i>
+  <span id="floatingCartCount">0</span>
+</button>
 
 </body>
 
